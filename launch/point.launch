@@ -1,0 +1,13 @@
+<launch>
+
+ <!-- Set non-default parameters -->
+
+ <!--Slider Angle Command-->
+  <node name="gimbal_slider" pkg="gimbal_pkg"  type="gimbal_cmd.py" output="screen">
+  </node>
+
+<!-- Write to Arduino -->
+  <node name="arduino_serial_write" pkg="gimbal_pkg"  type="gimbal_ros_to_arduino.py" output="screen">
+  </node>
+
+</launch>
