@@ -38,7 +38,7 @@ class Sliders:
 		# SECTION 2
 		################################################################
 		# Instantiate objects here
-		self.Spitch = mySlider(self.num_of_sliders,1,100,0,90.0,np.pi/180.0,'Pitch_r')
+		self.Spitch = mySlider(self.num_of_sliders,1,100,0,0,np.pi/180.0,'Pitch_r')
 		# self.Syaw = mySlider(self.num_of_sliders,2,30,-30,0,np.pi/180.0,'Yaw_r')
 		################################################################
 

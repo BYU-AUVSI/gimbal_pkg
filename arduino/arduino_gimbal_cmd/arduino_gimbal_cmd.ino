@@ -1,4 +1,4 @@
-/*
+ /*
 This file was adapted from Jae's gimbal control code. The original code is meant to be used with encoders. 
 Lots of the lines commented out are related to these encoders that we are not currently using.
 The main loop waits for data to be available from the serial port (on pins 2,3 of the arduino). It reads in the 
@@ -121,8 +121,8 @@ void setup(){
 //  delay(6000);
   //SBGC_sendCommand(SBGC_CMD_MOTOR_ON,0,0);  //ENCODER OBJECT
   delay(1000);
-  initialize_outgoing_data(30); //ENCODER OBJECT
-  set_outgoing_data(0, 30);    //ENCODER OBJECT
+  initialize_outgoing_data(1000); //ENCODER OBJECT
+  set_outgoing_data(-90, 30);    //ENCODER OBJECT
   SBGC_sendCommand(67, outgoing_data, 13); //ENCODER OBJECT
 
   digitalWrite(LED, HIGH);
@@ -200,13 +200,13 @@ void loop(){
  while(!Serial.available());
  float pitch_cmd;
  Serial.readBytes((char*)&pitch_cmd, sizeof(pitch_cmd));
-//
+pitch_cmd = -pitch_cmd;
  Serial.println(pitch_cmd);
 //  
 //  // move the motors to the desired position
   set_outgoing_data(pitch_cmd, -90);
   SBGC_sendCommand(67, outgoing_data, 13);
 
-  delay(1000);
+  delay(100);
 }
 
