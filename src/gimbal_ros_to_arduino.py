@@ -25,10 +25,12 @@ def callback(msg):
 
 def main():
 	global tmp
+	angle_tmp = Float64()
 
 	# Init ROS node and subscriber
 	rospy.init_node('Gimbal_ros_to_arduino', anonymous=True)
 	rospy.Subscriber('/gimbal_cmd', Float64, callback)
+	pub = rospy.Publisher('/gimbal_angle', Float64, queue_size=1)
 
 	print "========== gps_gimbal_pointing started =========="
 	arduino = sr.Serial('/dev/ttyUSB0')     # dummy serial port to get rid of garbage values left over
@@ -51,6 +53,13 @@ def main():
 					ser.write(b) # write command to arduino
 				time.sleep(0.2)
 				tmp = pitch # save last commanded pitch to check against
+			angle = ser.readline()
+			angle = float(angle)
+			if (angle != angle_tmp):
+				print 'Encoder Angle', angle
+				angle_tmp = angle
+				pub.publish(angle_tmp)
+
 	except rospy.ROSInterruptException:
 		print "exiting...."
 		ser.flushInput()

@@ -18,7 +18,7 @@ void setup()
   SPI.setDataMode(SPI_MODE0);
   SPI.setClockDivider(SPI_CLOCK_DIV32);
   Serial.begin(115200);
-  Serial.println("starting");
+//Serial.println("starting");
   Serial.flush();
   delay(2000);
   SPI.end();
@@ -67,6 +67,7 @@ void loop()
      ABSposition_last = ABSposition;    //set last position to current position
      deg = ABSposition;
      deg = deg * 0.08789;    // aprox 360/4096
+     uint8_t write_deg = deg;
      Serial.println(deg);     //send position in degrees
    }   
 

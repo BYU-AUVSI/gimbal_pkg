@@ -10,12 +10,13 @@ import rospy
 from std_msgs.msg import Float64
 import time
 
-ser = sr.Serial('/dev/ttyUSB0', 115200)
-ser.close()
-ser.open()
+ser = sr.Serial('/dev/ttyUSB0', 57600)
 ser.flush()
 
 while True:
 	#print ser.writable
+	#print ser.in_waiting
 	print ser.readline()
-	
+
+ser.close()
+
