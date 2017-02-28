@@ -121,7 +121,7 @@ void setup(){
 //  delay(6000);
   //SBGC_sendCommand(SBGC_CMD_MOTOR_ON,0,0);  //ENCODER OBJECT
   delay(1000);
-  initialize_outgoing_data(1000); //ENCODER OBJECT
+  initialize_outgoing_data(1000); // Input MOTOR_SPEED for speed of response to input
   set_outgoing_data(-90, 30);    //ENCODER OBJECT
   SBGC_sendCommand(67, outgoing_data, 13); //ENCODER OBJECT
 
