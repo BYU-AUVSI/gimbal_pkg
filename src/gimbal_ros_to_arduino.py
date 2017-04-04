@@ -56,9 +56,12 @@ def main():
 			angle = ser.readline()
 			angle = float(angle)
 			if (angle != angle_tmp):
-				print 'Encoder Angle', angle
+				angle_cal = angle - 68
+				if angle_cal > 180.0:
+					angle_cal -= 360
+				print 'Encoder Angle', angle_cal
 				angle_tmp = angle
-				pub.publish(angle_tmp)
+				pub.publish(angle_cal)
 
 	except rospy.ROSInterruptException:
 		print "exiting...."
