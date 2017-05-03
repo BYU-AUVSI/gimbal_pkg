@@ -200,12 +200,12 @@ void loop(){
      Serial.println(deg);     //send position in degrees
    }   
    // END ENCODER SPI STUFF
-
+boolean bomb;
   // GIMBAL ANGLE COMMAND STUFF
  // reading the desired elevation angle
  if (Serial.available()){
   float pitch_cmd;
-  boolean bomb;
+  
   Serial.readBytes((char*)&pitch_cmd, sizeof(pitch_cmd));
   Serial.readBytes((char*)&bomb, sizeof(bomb)); 
   pitch_cmd = -pitch_cmd;
@@ -213,8 +213,13 @@ void loop(){
   SBGC_sendCommand(67, outgoing_data, 13);
  }
  
- if bomb{
- 
+ if (bomb){
+ bomb_servo.write(160);
+ delay(100);
+ bomb_servo.write(20);
+ }
+ else{
+ bomb_servo.write(20);
  }
  
   delay(100);
