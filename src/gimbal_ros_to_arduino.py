@@ -8,7 +8,7 @@ import serial as sr
 import numpy as np
 import math as m
 import rospy, tf
-from std_msgs.msg import Float64
+from std_msgs.msg import Float64, Bool
 
 import time, struct
 import sys
@@ -16,20 +16,27 @@ import sys
 # Init global variables (Object Oriented Programming would be better)
 pitch = 0.0
 tmp = 0.0
+bomb = False
 
 # Callback Function for /gimbal_cmd subscriber
 def callback(msg):
 	global pitch
 	pitch = msg.data
 
+# Callback Function for /bomd_drop subscriber
+def bomb_callback(msg):
+	global bomb
+	bomb = msg.data
+
 
 def main():
-	global tmp
+	global tmp, bomb
 	angle_tmp = Float64()
 
 	# Init ROS node and subscriber
 	rospy.init_node('Gimbal_ros_to_arduino', anonymous=True)
 	rospy.Subscriber('/gimbal_cmd', Float64, callback)
+	rospy.Subscriber('/bomb_drop', Bool, bomb_callback)
 	pub = rospy.Publisher('/gimbal_angle', Float64, queue_size=1)
 
 	print "========== gps_gimbal_pointing started =========="
@@ -44,11 +51,11 @@ def main():
 
 	try:
 		while not rospy.is_shutdown(): 
-			if tmp != pitch: # check to see if commanded pitch is new
+			if tmp != pitch or bomb: # check to see if commanded pitch is new
 				pitch_cmd = round(pitch, 2)
 				pitch_cmd = pitch_cmd*(180.0/np.pi) # convert to degrees
 				print "commanded pitch", pitch_cmd
-				bin = struct.pack('f', pitch_cmd) # setup bits to write
+				bin = struct.pack('f', pitch_cmd, bomb) # setup bits to write
 				for b in bin:       # float 4 bytes
 					ser.write(b) # write command to arduino
 				time.sleep(0.2)

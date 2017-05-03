@@ -11,6 +11,7 @@ Communication with encoder is over SPI
 
 #include <Wire.h>
 #include <SoftwareSerial.h>
+#include <Servo.h>
 
 #include <inttypes.h>
 #include <SBGC.h> //Header for Gimbal Controller Functions
@@ -21,6 +22,9 @@ Communication with encoder is over SPI
 SoftwareSerial mySerial(2, 3);  // connect (TX, RX) from gimbal controller to (pin2, pin3) respectively
 
 #define CS 10 //Chip or Slave select for SPI
+
+//Bombdrop 
+Servo bomb_servo;
 
 //BGC Params
 #define SBGC_CMD_CALIB_ACC 'A'
@@ -122,6 +126,9 @@ void setup(){
   delay(2000);
   SPI.end();
   
+  // Bomb Servo 
+  bomb_servo.attach(9);
+  
   //Calibrate accelerometers
   //SBGC_sendCommand(SBGC_CMD_CALIB_ACC,0,0);  //BGC 
 //  delay(6000);
@@ -198,12 +205,18 @@ void loop(){
  // reading the desired elevation angle
  if (Serial.available()){
   float pitch_cmd;
-  Serial.readBytes((char*)&pitch_cmd, sizeof(pitch_cmd)); 
+  boolean bomb;
+  Serial.readBytes((char*)&pitch_cmd, sizeof(pitch_cmd));
+  Serial.readBytes((char*)&bomb, sizeof(bomb)); 
   pitch_cmd = -pitch_cmd;
   set_outgoing_data(pitch_cmd);
   SBGC_sendCommand(67, outgoing_data, 13);
  }
-
+ 
+ if bomb{
+ 
+ }
+ 
   delay(100);
 }
 
